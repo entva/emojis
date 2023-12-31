@@ -5,7 +5,7 @@ const { shortnameToUnicode, unicodeToShortname } = require('./lib/utils');
 const { render: renderEmoji } = require('./lib');
 const { getVersion } = require('./tasks/utils/unicode');
 const { getUnicodeSpec } = require('./tasks/utils/data');
-const { collection } = require('./vendor/emojis');
+const { collection } = require('./vendor/emojis.json');
 
 const PORT = 3000;
 const app = express();

@@ -1,4 +1,4 @@
-const pkg = require('../../package');
+const pkg = require('../../package.json');
 
 const version = pkg.devDependencies['emoji-assets'].replace(/\^/g, '');
 

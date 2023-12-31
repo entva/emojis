@@ -2,7 +2,7 @@ const { logResult } = require('./utils/log');
 const { codePointToUnicode } = require('../lib/conversions');
 
 const run = (style) => {
-  const { collection } = require('../vendor/emojis');
+  const { collection } = require('../vendor/emojis.json');
   const suggested = collection.reduce((acc, { hex, shortname, suggest }) => {
     if (suggest) acc.push([shortname, codePointToUnicode(hex)]);
     return acc;

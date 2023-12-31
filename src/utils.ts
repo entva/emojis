@@ -18,7 +18,7 @@ const defaultOptions: Options = {
 export type Options = {
   size: keyof typeof AVAILABLE_SIZES, // size of emojis to use when the default CDN is used
   className: string | null, // CSS class to use when rendering image tags
-  unsafe: boolean, // when set to true, render will NOT sanitize the string, e.g. it forces "unsafe" output
+  unsafe: boolean, // when set to true, render will NOT sanitize the string
   single: boolean, // when a string contains just a single emoji this speeds up render a bit
   cdn?: string, // a CDN to use for image paths
 };
