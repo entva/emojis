@@ -1,0 +1,6 @@
+{
+  "extends": ["entva-typescript"],
+  "rules": {
+    "import/no-extraneous-dependencies": "off"
+  }
+}

@@ -1,0 +1,4 @@
+module.exports = {
+  SUGGESTABLE_UNICODE_VERSION: 15,
+  CURRENT_UNICODE_VERSION: 15,
+};
