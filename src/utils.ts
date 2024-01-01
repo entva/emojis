@@ -10,16 +10,15 @@ const AVAILABLE_SIZES = {
 
 const defaultOptions: Options = {
   size: 64,
-  className: null,
   unsafe: false,
   single: false,
 };
 
 export type Options = {
   size: keyof typeof AVAILABLE_SIZES, // size of emojis to use when the default CDN is used
-  className: string | null, // CSS class to use when rendering image tags
   unsafe: boolean, // when set to true, render will NOT sanitize the string
   single: boolean, // when a string contains just a single emoji this speeds up render a bit
+  className?: string, // CSS class to use when rendering image tags
   cdn?: string, // a CDN to use for image paths
 };
 
@@ -59,7 +58,7 @@ export const unicodeToShortname = (unicode: string) => {
   return emoji.shortname;
 };
 
-export const sanitize = (string: string, options: Options) => (
+export const sanitize = (string: string, options?: Partial<Options>) => (
   (options && options.unsafe) ? string : escapeHtml(string)
 );
 export const getOptions = (options?: Partial<Options>) => ({ ...defaultOptions, ...options });
@@ -75,14 +74,19 @@ export const getImageSrc = (icon: string, prefix: string | Options['size']) => {
   return `${cdn}/${icon}.png`;
 };
 
+export const getImageData = (hex: string) => {
+  const id = hexToId(hex);
+  const symbol = codePointToUnicode(hex);
+  return { id, symbol };
+};
+
 export const hexToImage = (hex: string, options?: Options) => {
   const { size, className, cdn } = getOptions(options);
-  const id = hexToId(hex);
+  const { id, symbol } = getImageData(hex);
   const src = getImageSrc(id, cdn || size);
-  const alt = codePointToUnicode(hex);
 
   let propsString = `draggable="false" data-emoji="${id}"`;
   if (className) propsString += ` class="${className}"`;
 
-  return `<img src="${src}" alt="${alt}" ${propsString} />`;
+  return `<img src="${src}" alt="${symbol}" ${propsString} />`;
 };

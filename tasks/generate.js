@@ -94,8 +94,8 @@ const getRegex = (hash) => {
     // TODO: Remove sorting logic once the upstream bug is addressed.
     // https://github.com/devongovett/regexgen/issues/31
     // Longest strings first.
-    const aLength = [...a].length;
-    const bLength = [...b].length;
+    const aLength = a.length;
+    const bLength = b.length;
     if (aLength > bLength) return -1;
     if (aLength < bLength) return 1;
     // Lengths are equal; sort lexicographically from a-z.

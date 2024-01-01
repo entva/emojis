@@ -4,6 +4,7 @@ import {
   sanitize,
 
   hexToImage,
+  getImageData,
 
   shortnameToEmoji,
   unicodeToEmoji,
@@ -33,7 +34,7 @@ export const unicodeToShortnames = (string?: string) => {
   return string.replace(regexUnicode, unicodeToShortname);
 };
 
-export const renderShortname = (string?: string, settings?: Partial<Options>) => {
+export const renderShortnameToString = (string?: string, settings?: Partial<Options>) => {
   if (typeof string !== 'string') return null;
   const options = getOptions(settings);
 
@@ -49,7 +50,7 @@ export const renderShortname = (string?: string, settings?: Partial<Options>) =>
   return sanitize(string, options).replace(regexShortname, compile);
 };
 
-export const render = (string?: string, settings?: Partial<Options>) => {
+export const renderToString = (string?: string, settings?: Partial<Options>) => {
   if (typeof string !== 'string') return null;
   const options = getOptions(settings);
 
@@ -63,6 +64,33 @@ export const render = (string?: string, settings?: Partial<Options>) => {
   // Trust string in "single character" mode
   if (options.single) return compile(string);
   return sanitize(string, options).replace(regexUnicode, compile);
+};
+
+export type RenderCallback<T> = (id: string, symbol: string, index: number) => T;
+export type RenderedArray<T> = (string | T)[];
+export const renderToArray = <T = unknown>(string?: string, callback?: RenderCallback<T>) => {
+  if (typeof string !== 'string') return null;
+  if (typeof callback !== 'function') return [string];
+
+  const compile = (acc: RenderedArray<T>, unicode: string, index: number) => {
+    // filter out empty strings
+    if (!unicode) return acc;
+
+    const emoji = unicodeToEmoji(unicode);
+
+    // do nothing if unicode is not recognized
+    if (!emoji) {
+      acc.push(unicode);
+      return acc;
+    }
+
+    const { id, symbol } = getImageData(emoji.hex);
+    const result = callback(id, symbol, index);
+    if (result) acc.push(result);
+    return acc;
+  };
+
+  return string.split(regexUnicode).reduce(compile, [] as RenderedArray<T>);
 };
 
 export { collection as emojiCollection, emojiRegex, shortnameRegex };

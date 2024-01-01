@@ -29,16 +29,24 @@ representation. Ignores unknown shortnames.
 
 Opposite of `shortnamesToUnicode`.
 
-### renderShortname(string, options)
+### renderShortnameToString(string, options)
 
 Takes a string with shortnames and returns a string with every known emoji shortname replaced with an image tag. Useful
 for rendering specific emojis when it's easier to use `:bacon:` instead of 🥓. For a list of supported options check
 below.
 
-### render(string, options)
+### renderToString(string, options)
 
 Takes a string with unicode emojis and returns a string with every known emoji sequence replaced with an image tag.
 Useful for rendering user generated content. For a list of supported options check below.
+
+### renderToArray(string, callback)
+
+Takes a string with unicode emojis and returns an array of mixed data. Calls callback for every known emoji sequence
+to be replaced with any kind of data you like (React Fragments, Vue specific data structure etc).
+The callback will be called with 3 arguments: image name, unicode symbol and replacement index. Useful for
+using native rendering within your target UI framework. Returned array will be filtered out to omit empty
+strings. Return `null` or an empty string from the callback function to strip away emojis.
 
 ### emojiCollection
 

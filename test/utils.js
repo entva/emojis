@@ -12,6 +12,7 @@ const {
   sanitize,
   getOptions,
   getImageSrc,
+  getImageData,
 
   hexToImage,
 } = require('../lib/utils');
@@ -81,6 +82,10 @@ describe('utils', () => {
     assert.equal(getImageSrc(emoji.icon, 128).includes(`/128/${emoji.icon}.png`), true, 'can set size');
     assert.equal(getImageSrc(emoji.icon, 999999).includes(`/64/${emoji.icon}.png`), true, 'only whitelisted sizes work');
     assert.equal(getImageSrc(emoji.icon, 'http://maxcdn.com/1024').includes(`http://maxcdn.com/1024/${emoji.icon}.png`), true, 'setting CDN works');
+  });
+
+  it('getImageData', () => {
+    assert.deepEqual(getImageData(mixed.hex), { id: mixed.icon, symbol: mixed.unicode }, true, 'returns correct data');
   });
 
   it('hexToImage', () => {

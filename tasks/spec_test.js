@@ -5,7 +5,7 @@ const { unicodeToEmoji } = require('../lib/utils');
 const { logSuccess, logError } = require('./utils/log');
 const { getUnicodeSpec } = require('./utils/data');
 const { getVersion } = require('./utils/unicode');
-const { render, emojiRegex } = require('../lib');
+const { renderToString: render, emojiRegex } = require('../lib');
 
 const renderedRegex = /<img src="[/\w.-]+"\salt="\S+"\sdraggable="false"\sdata-emoji="[0-f-]+"\s\/>/g;
 

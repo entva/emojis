@@ -6,8 +6,9 @@ const {
   shortnamesToUnicode,
   unicodeToShortnames,
 
-  renderShortname,
-  render,
+  renderShortnameToString,
+  renderToString,
+  renderToArray,
 
   emojiCollection,
   emojiRegex,
@@ -114,7 +115,7 @@ describe('emojitsu', () => {
     assert.equal(unicodeToShortnames(long2), expected2, 'long string mixed with spaces');
   });
 
-  it('renderShortname', () => {
+  it('renderShortnameToString', () => {
     const expectedEmoji = `<img src="${imagePath}/64/1f953.png" alt="🥓" draggable="false" data-emoji="1f953" />`;
     const expectedToned = `<img src="${imagePath}/64/1f44d-1f3ff.png" alt="👍🏿" draggable="false" data-emoji="1f44d-1f3ff" />`;
     const expectedMixed = `<img src="${imagePath}/64/1f469-1f469-1f466.png" alt="👩‍👩‍👦" draggable="false" data-emoji="1f469-1f469-1f466" />`;
@@ -145,32 +146,32 @@ describe('emojitsu', () => {
     const unescapedHTML = `<span>${expectedSpecialEnder}</span>`;
     const className = 'MY_UNIQUE_CLASS_NAME_FOR_SURE_THERE';
 
-    assert.equal(renderShortname(), null, 'no arguments');
-    assert.equal(renderShortname(null), null, 'null');
-    assert.equal(renderShortname(''), '', 'empty string');
+    assert.equal(renderShortnameToString(), null, 'no arguments');
+    assert.equal(renderShortnameToString(null), null, 'null');
+    assert.equal(renderShortnameToString(''), '', 'empty string');
 
-    assert.equal(renderShortname(emoji.shortname), expectedEmoji, 'returns html for emoji shortname');
-    assert.equal(renderShortname(tone.shortname), expectedToned, 'returns html for toned shortname');
-    assert.equal(renderShortname(mixed.shortname), expectedMixed, 'returns html for mixed shortname');
-    assert.equal(renderShortname(specialSpacer.shortname), expectedSpecialSpacer, 'returns html for 200d shortname');
-    assert.equal(renderShortname(specialEnder.shortname), expectedSpecialEnder, 'returns html for fe0f shortname');
+    assert.equal(renderShortnameToString(emoji.shortname), expectedEmoji, 'returns html for emoji shortname');
+    assert.equal(renderShortnameToString(tone.shortname), expectedToned, 'returns html for toned shortname');
+    assert.equal(renderShortnameToString(mixed.shortname), expectedMixed, 'returns html for mixed shortname');
+    assert.equal(renderShortnameToString(specialSpacer.shortname), expectedSpecialSpacer, 'returns html for 200d shortname');
+    assert.equal(renderShortnameToString(specialEnder.shortname), expectedSpecialEnder, 'returns html for fe0f shortname');
 
-    assert.equal(renderShortname(emoji.shortname, { single: true }), expectedEmoji, 'returns html for emoji shortname - single');
-    assert.equal(renderShortname(tone.shortname, { single: true }), expectedToned, 'returns html for toned shortname - single');
-    assert.equal(renderShortname(mixed.shortname, { single: true }), expectedMixed, 'returns html for mixed shortname - single');
-    assert.equal(renderShortname(specialSpacer.shortname, { single: true }), expectedSpecialSpacer, 'returns html for 200d shortname - single');
-    assert.equal(renderShortname(specialEnder.shortname, { single: true }), expectedSpecialEnder, 'returns html for fe0f shortname - single');
+    assert.equal(renderShortnameToString(emoji.shortname, { single: true }), expectedEmoji, 'returns html for emoji shortname - single');
+    assert.equal(renderShortnameToString(tone.shortname, { single: true }), expectedToned, 'returns html for toned shortname - single');
+    assert.equal(renderShortnameToString(mixed.shortname, { single: true }), expectedMixed, 'returns html for mixed shortname - single');
+    assert.equal(renderShortnameToString(specialSpacer.shortname, { single: true }), expectedSpecialSpacer, 'returns html for 200d shortname - single');
+    assert.equal(renderShortnameToString(specialEnder.shortname, { single: true }), expectedSpecialEnder, 'returns html for fe0f shortname - single');
 
-    assert.equal(renderShortname(shortnameMix), expectedMix, 'shortname mix');
-    assert.equal(renderShortname(textShortnameMix), expectedTextMix, 'text shortname mix');
+    assert.equal(renderShortnameToString(shortnameMix), expectedMix, 'shortname mix');
+    assert.equal(renderShortnameToString(textShortnameMix), expectedTextMix, 'text shortname mix');
 
-    assert.equal(renderShortname(HTML), escapedHTML, 'escapes HTML');
-    assert.equal(renderShortname(HTML, { unsafe: true }), unescapedHTML, 'can be forced to output unsafe content');
+    assert.equal(renderShortnameToString(HTML), escapedHTML, 'escapes HTML');
+    assert.equal(renderShortnameToString(HTML, { unsafe: true }), unescapedHTML, 'can be forced to output unsafe content');
 
-    assert.equal(renderShortname(HTML, { className }).includes(className), true, 'includes className');
+    assert.equal(renderShortnameToString(HTML, { className }).includes(className), true, 'includes className');
   });
 
-  it('render', () => {
+  it('renderToString', () => {
     const expectedEmoji = `<img src="${imagePath}/64/1f953.png" alt="🥓" draggable="false" data-emoji="1f953" />`;
     const expectedToned = `<img src="${imagePath}/64/1f44d-1f3ff.png" alt="👍🏿" draggable="false" data-emoji="1f44d-1f3ff" />`;
     const expectedMixed = `<img src="${imagePath}/64/1f469-1f469-1f466.png" alt="👩‍👩‍👦" draggable="false" data-emoji="1f469-1f469-1f466" />`;
@@ -203,31 +204,90 @@ describe('emojitsu', () => {
 
     const simple = '~`!@#$%^&*()_+-={}[]:";\'<>?,./|\\0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
-    assert.equal(render(), null, 'no arguments');
-    assert.equal(render(null), null, 'null');
-    assert.equal(render(''), '', 'empty string');
+    assert.equal(renderToString(), null, 'no arguments');
+    assert.equal(renderToString(null), null, 'null');
+    assert.equal(renderToString(''), '', 'empty string');
 
-    assert.equal(render(emoji.unicode), expectedEmoji, 'returns html for emoji unicode');
-    assert.equal(render(tone.unicode), expectedToned, 'returns html for toned unicode');
-    assert.equal(render(mixed.unicode), expectedMixed, 'returns html for mixed unicode');
-    assert.equal(render(specialSpacer.unicode), expectedSpecialSpacer, 'returns html for 200d unicode');
-    assert.equal(render(specialEnder.unicode), expectedSpecialEnder, 'returns html for fe0f unicode');
+    assert.equal(renderToString(emoji.unicode), expectedEmoji, 'returns html for emoji unicode');
+    assert.equal(renderToString(tone.unicode), expectedToned, 'returns html for toned unicode');
+    assert.equal(renderToString(mixed.unicode), expectedMixed, 'returns html for mixed unicode');
+    assert.equal(renderToString(specialSpacer.unicode), expectedSpecialSpacer, 'returns html for 200d unicode');
+    assert.equal(renderToString(specialEnder.unicode), expectedSpecialEnder, 'returns html for fe0f unicode');
 
-    assert.equal(render(emoji.unicode, { single: true }), expectedEmoji, 'returns html for emoji unicode');
-    assert.equal(render(tone.unicode, { single: true }), expectedToned, 'returns html for toned unicode');
-    assert.equal(render(mixed.unicode, { single: true }), expectedMixed, 'returns html for mixed unicode');
-    assert.equal(render(specialSpacer.unicode, { single: true }), expectedSpecialSpacer, 'returns html for 200d unicode');
-    assert.equal(render(specialEnder.unicode, { single: true }), expectedSpecialEnder, 'returns html for fe0f unicode');
+    assert.equal(renderToString(emoji.unicode, { single: true }), expectedEmoji, 'returns html for emoji unicode');
+    assert.equal(renderToString(tone.unicode, { single: true }), expectedToned, 'returns html for toned unicode');
+    assert.equal(renderToString(mixed.unicode, { single: true }), expectedMixed, 'returns html for mixed unicode');
+    assert.equal(renderToString(specialSpacer.unicode, { single: true }), expectedSpecialSpacer, 'returns html for 200d unicode');
+    assert.equal(renderToString(specialEnder.unicode, { single: true }), expectedSpecialEnder, 'returns html for fe0f unicode');
 
-    assert.equal(render(unicodeMix), expectedMix, 'unicode mix');
-    assert.equal(render(textUnicodeMix), expectedTextMix, 'text unicode mix');
+    assert.equal(renderToString(unicodeMix), expectedMix, 'unicode mix');
+    assert.equal(renderToString(textUnicodeMix), expectedTextMix, 'text unicode mix');
 
-    assert.equal(render(HTML), escapedHTML, 'escapes HTML');
-    assert.equal(render(HTML, { unsafe: true }), unescapedHTML, 'can be forced to output unsafe content');
+    assert.equal(renderToString(HTML), escapedHTML, 'escapes HTML');
+    assert.equal(renderToString(HTML, { unsafe: true }), unescapedHTML, 'can be forced to output unsafe content');
 
-    assert.equal(render(HTML, { className }).includes(className), true, 'includes className');
+    assert.equal(renderToString(HTML, { className }).includes(className), true, 'includes className');
 
-    assert.equal(render(simple, { unsafe: true }), simple, 'doesn\'t replace numbers and letters');
+    assert.equal(renderToString(simple, { unsafe: true }), simple, 'doesn\'t replace numbers and letters');
+  });
+
+  it('renderToArray', () => {
+    const renderFn = (id) => `<${id}>`;
+    const expectedEmoji = '<1f953>';
+    const expectedToned = '<1f44d-1f3ff>';
+    const expectedMixed = '<1f469-1f469-1f466>';
+    const expectedSpecialSpacer = '<1f469-1f3fd-1f680>';
+    const expectedSpecialEnder = '<1f468-1f3ff-2708>';
+
+    const unicodeMix = [
+      specialEnder.unicode,
+      specialSpacer.unicode,
+      mixed.unicode,
+      tone.unicode,
+      emoji.unicode,
+    ].join('');
+
+    const textUnicodeMix = `is ${specialSpacer.unicode}${specialEnder.unicode} good ${tone.unicode} k`;
+
+    const expectedMix = [
+      expectedSpecialEnder,
+      expectedSpecialSpacer,
+      expectedMixed,
+      expectedToned,
+      expectedEmoji,
+    ];
+    const expectedTextMix = [
+      'is ',
+      expectedSpecialSpacer,
+      expectedSpecialEnder,
+      ' good ',
+      expectedToned,
+      ' k',
+    ];
+
+    const expectedStrippedMix = [
+      'is ',
+      ' good ',
+      ' k',
+    ];
+
+    const simple = '~`!@#$%^&*()_+-={}[]:";\'<>?,./|\\0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+
+    assert.equal(renderToArray(), null, 'no arguments');
+    assert.equal(renderToArray(null), null, 'null');
+    assert.deepStrictEqual(renderToArray('', renderFn), [], 'empty string');
+
+    assert.deepStrictEqual(renderToArray(emoji.unicode, renderFn), [expectedEmoji], 'returns data for emoji unicode');
+    assert.deepStrictEqual(renderToArray(tone.unicode, renderFn), [expectedToned], 'returns data for toned unicode');
+    assert.deepStrictEqual(renderToArray(mixed.unicode, renderFn), [expectedMixed], 'returns data for mixed unicode');
+    assert.deepStrictEqual(renderToArray(specialSpacer.unicode, renderFn), [expectedSpecialSpacer], 'returns data for 200d unicode');
+    assert.deepStrictEqual(renderToArray(specialEnder.unicode, renderFn), [expectedSpecialEnder], 'returns data for fe0f unicode');
+
+    assert.deepStrictEqual(renderToArray(unicodeMix, renderFn), expectedMix, 'unicode mix');
+    assert.deepStrictEqual(renderToArray(textUnicodeMix, renderFn), expectedTextMix, 'text unicode mix');
+    assert.deepStrictEqual(renderToArray(textUnicodeMix, () => null), expectedStrippedMix, 'strip away emojis');
+
+    assert.deepStrictEqual(renderToArray(simple, renderFn), [simple], 'doesn\'t replace numbers and letters');
   });
 
   it('emojiCollection', () => {
